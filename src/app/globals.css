@@ -1,49 +1,98 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-text-primary: #101828;
+  --color-text-secondary: #475467;
+  --color-text-muted: #6c717b;
+  --color-background: #ffffff;
+  --color-surface: #f7f7f7;
+  --color-badge: #f2f4f7;
+  --color-border: #dadde1;
+  --color-accent: #829b91;
+  --color-accent-hover: #6d7b75;
+  --color-rating: #ffc531;
+  --color-error: #e44848;
+  --color-error-label: #ec383b;
+  --color-error-background: #ffdfdf;
+  --color-overlay: rgba(223, 223, 223, 0.44);
+  --color-hero-overlay: rgba(0, 0, 0, 0.2);
+
+  --font-family-base: var(--font-inter), sans-serif;
+  --font-body: 400 16px / 1.5 var(--font-family-base);
+  --font-body-medium: 500 16px / 1.5 var(--font-family-base);
+  --font-button: var(--font-body-medium);
+  --font-h1: 600 48px / 32px var(--font-family-base);
+  --font-h2: 600 24px / 32px var(--font-family-base);
+  --font-h3: 600 20px / 24px var(--font-family-base);
+  --letter-spacing-normal: 0;
+  --letter-spacing-button: -0.08px;
+
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 32px;
+  --space-xl: 48px;
+  --space-2xl: 64px;
+
+  --radius-label: 8px;
+  --radius-input: 12px;
+  --radius-card: 16px;
+  --radius-panel: 20px;
+  --radius-badge: 100px;
+  --radius-button: 200px;
+
+  --container-content-width: 1312px;
+  --container-padding-inline: 64px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
 }
 
 html {
   height: 100%;
 }
 
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
 body {
   min-height: 100%;
   display: flex;
   flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--color-text-primary);
+  background-color: var(--color-background);
+  font: var(--font-body);
+  letter-spacing: var(--letter-spacing-normal);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
 }
 
 a {
-  color: inherit;
+  color: var(--color-text-primary, inherit);
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+.container {
+  width: 100%;
+  max-width: calc(
+    var(--container-content-width) + 2 * var(--container-padding-inline)
+  );
+  margin-inline: auto;
+  padding-inline: var(--container-padding-inline);
 }
