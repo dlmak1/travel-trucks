@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
+import Header from "@/components/Header/Header";
 import QueryProvider from "@/components/Providers/QueryProvider";
 import "./globals.css";
 
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${inter.variable} ${geistSans.variable} ${geistMono.variable}`}
     >
       <body>
+        <Header />
         <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
