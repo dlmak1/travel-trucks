@@ -1,5 +1,5 @@
 .hero {
-  min-height: 696px;
+  min-height: calc(100svh - 72px);
   padding-block: 195px 80px;
   color: var(--color-surface);
   background-color: var(--color-text-primary);
@@ -66,9 +66,7 @@
 
 @media (max-width: 767px) {
   .hero {
-    min-height: max(560px, calc(100svh - 72px));
     padding-block: 128px 80px;
-    background-position: left center;
   }
 
   .container {

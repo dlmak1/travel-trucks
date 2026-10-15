@@ -1,0 +1,157 @@
+.card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  min-height: 312px;
+  padding: var(--space-md);
+  border-radius: var(--radius-card);
+  background-color: var(--color-surface);
+}
+
+.photo {
+  position: relative;
+  flex: 0 0 219px;
+  width: 219px;
+  height: 240px;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+}
+
+.image {
+  object-fit: cover;
+  object-position: center;
+}
+
+.info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-md);
+  min-width: 0;
+}
+
+.text {
+  width: 100%;
+}
+
+.heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 153px;
+  gap: var(--space-sm);
+  align-items: start;
+}
+
+.name,
+.price {
+  font: var(--font-h2);
+  font-optical-sizing: none;
+}
+
+.name {
+  overflow-wrap: anywhere;
+}
+
+.price {
+  white-space: nowrap;
+}
+
+.details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs) var(--space-sm);
+  margin-top: var(--space-xs);
+}
+
+.detail {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.detail svg,
+.badge svg {
+  flex-shrink: 0;
+}
+
+.star {
+  color: var(--color-rating);
+}
+
+.description {
+  width: 100%;
+  overflow: hidden;
+  color: var(--color-text-secondary);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  list-style: none;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 48px;
+  padding: 12px 18px;
+  border-radius: var(--radius-badge);
+  background-color: var(--color-badge);
+  font: var(--font-body-medium);
+  mix-blend-mode: multiply;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 173px;
+  min-height: 56px;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-button);
+  color: var(--color-background);
+  background-color: var(--color-accent);
+  font: var(--font-button);
+  letter-spacing: var(--letter-spacing-button);
+}
+
+.button:hover {
+  background-color: var(--color-accent-hover);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--color-accent-hover);
+  outline-offset: 4px;
+}
+
+@media (max-width: 1199px) {
+  .description {
+    overflow: visible;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+}
+
+@media (max-width: 600px) {
+  .card {
+    flex-direction: column;
+  }
+
+  .photo {
+    flex: none;
+    width: 100%;
+  }
+
+  .info {
+    width: 100%;
+  }
+
+  .heading {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-xs);
+  }
+}
