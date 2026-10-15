@@ -6,11 +6,15 @@ import styles from "./CamperList.module.css";
 interface CamperListProps {
   campers: CamperListItem[];
   status?: "success" | "loading" | "error";
+  onClear: () => void;
+  onRetry: () => void;
 }
 
 export default function CamperList({
   campers,
   status = "success",
+  onClear,
+  onRetry,
 }: CamperListProps) {
   if (status === "error") {
     return (
@@ -22,44 +26,20 @@ export default function CamperList({
         <p className={styles.stateDescription}>
           Please try again to see the available campers.
         </p>
-        <form action="/catalog" method="get">
-          <button className={styles.primaryButton} type="submit">
-            Try again
-          </button>
-        </form>
+        <button
+          className={styles.primaryButton}
+          type="button"
+          onClick={onRetry}
+        >
+          Retry
+        </button>
       </div>
     );
   }
 
-  if (status === "loading") {
-    return (
-      <div className={styles.loadingStage} aria-busy="true">
-        <div className={styles.overlay}>
-          <div className={styles.loadingDialog} role="status" aria-live="polite">
-            <svg
-              className={styles.loader}
-              width="72"
-              height="72"
-              aria-hidden="true"
-              focusable="false"
-            >
-              <use href="/icons/sprite.svg#icon-loader" />
-            </svg>
-            <div>
-              <h2 className={styles.stateTitle}>Loading tracks...</h2>
-              <p className={styles.stateDescription}>
-                Please wait while we fetch the best
-                <br />
-                travel trucks for you
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const isLoading = status === "loading";
 
-  if (campers.length === 0) {
+  if (campers.length === 0 && !isLoading) {
     return (
       <div className={`${styles.state} ${styles.empty}`} role="status">
         <Image
@@ -90,8 +70,7 @@ export default function CamperList({
           <button
             className={styles.primaryButton}
             type="button"
-            disabled
-            title="Viewing all campers is currently unavailable"
+            onClick={onClear}
           >
             View all campers
           </button>
@@ -101,12 +80,42 @@ export default function CamperList({
   }
 
   return (
-    <ul className={styles.list} aria-label="Camper results">
-      {campers.map((camper) => (
-        <li key={camper.id}>
-          <CamperCard camper={camper} />
-        </li>
-      ))}
-    </ul>
+    <div className={isLoading ? styles.loadingStage : undefined}>
+      <ul
+        className={styles.list}
+        aria-label="Camper results"
+        aria-busy={isLoading}
+        inert={isLoading}
+      >
+        {campers.map((camper) => (
+          <li key={camper.id}>
+            <CamperCard camper={camper} />
+          </li>
+        ))}
+      </ul>
+      {isLoading && (
+        <div className={styles.overlay}>
+          <div className={styles.loadingDialog} role="status" aria-live="polite">
+            <svg
+              className={styles.loader}
+              width="72"
+              height="72"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <use href="/icons/sprite.svg#icon-loader" />
+            </svg>
+            <div>
+              <h2 className={styles.stateTitle}>Loading tracks...</h2>
+              <p className={styles.stateDescription}>
+                Please wait while we fetch the best
+                <br />
+                travel trucks for you
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

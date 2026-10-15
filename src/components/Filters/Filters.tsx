@@ -1,5 +1,6 @@
 import type {
   CamperEngine,
+  CamperFilters,
   CamperForm,
   CamperTransmission,
 } from "@/types/camper";
@@ -30,10 +31,34 @@ const groups = [
   { name: "transmission", label: "Transmission", options: transmissionOptions },
 ] as const;
 
-export default function Filters() {
+interface FiltersProps {
+  filters: CamperFilters;
+  onChange: (filters: CamperFilters) => void;
+  onSearch: () => void;
+  onClear: () => void;
+  isLoading: boolean;
+}
+
+export default function Filters({
+  filters,
+  onChange,
+  onSearch,
+  onClear,
+  isLoading,
+}: FiltersProps) {
   return (
     <aside className={styles.panel} aria-label="Camper filters">
-      <form id="catalog-filters">
+      <form
+        id="catalog-filters"
+        onSubmit={(event) => {
+          event.preventDefault();
+          if (!isLoading) onSearch();
+        }}
+        onReset={(event) => {
+          event.preventDefault();
+          onClear();
+        }}
+      >
         <label className={styles.locationLabel} htmlFor="camper-location">
           Location
         </label>
@@ -48,6 +73,10 @@ export default function Filters() {
             type="text"
             placeholder="City"
             autoComplete="address-level2"
+            value={filters.location ?? ""}
+            onChange={(event) =>
+              onChange({ ...filters, location: event.target.value })
+            }
           />
         </div>
 
@@ -64,6 +93,8 @@ export default function Filters() {
                       type="radio"
                       name={name}
                       value={value}
+                      checked={filters[name] === value}
+                      onChange={() => onChange({ ...filters, [name]: value })}
                     />
                     <span className={styles.radioIcon} aria-hidden="true">
                       <svg width="24" height="24" focusable="false">
@@ -90,8 +121,8 @@ export default function Filters() {
           <button
             className={styles.search}
             type="submit"
-            disabled
-            title="Search is currently unavailable"
+            disabled={isLoading}
+            aria-busy={isLoading}
           >
             Search
           </button>
