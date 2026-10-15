@@ -1,14 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
+import {
+  hashKey,
+  keepPreviousData,
+  useInfiniteQuery,
+  useQueryClient,
+  type InfiniteData,
+} from "@tanstack/react-query";
 import CamperList from "@/components/CamperList/CamperList";
 import Filters from "@/components/Filters/Filters";
 import { getCampers } from "@/lib/api";
-import type { CamperFilters } from "@/types/camper";
+import type { CamperFilters, CampersResponse } from "@/types/camper";
 import styles from "./catalog.module.css";
 
 export default function CatalogClient() {
+  const queryClient = useQueryClient();
   const [draftFilters, setDraftFilters] = useState<CamperFilters>({});
   const [appliedFilters, setAppliedFilters] = useState<CamperFilters>({});
   const query = useInfiniteQuery({
@@ -22,8 +29,29 @@ export default function CatalogClient() {
     refetchOnWindowFocus: false,
   });
 
+  async function changeAppliedFilters(filters: CamperFilters) {
+    const queryKey = ["campers", filters];
+    if (hashKey(queryKey) === hashKey(["campers", appliedFilters])) return;
+
+    await queryClient.cancelQueries({ queryKey, exact: true });
+    const updatedAt = queryClient.getQueryState(queryKey)?.dataUpdatedAt;
+    queryClient.setQueryData<InfiniteData<CampersResponse, number>>(
+      queryKey,
+      (data) =>
+        data
+          ? {
+              ...data,
+              pages: data.pages.slice(0, 1),
+              pageParams: data.pageParams.slice(0, 1),
+            }
+          : undefined,
+      { updatedAt },
+    );
+    setAppliedFilters(filters);
+  }
+
   function applyFilters() {
-    setAppliedFilters({
+    void changeAppliedFilters({
       ...draftFilters,
       location: draftFilters.location?.trim() || undefined,
     });
@@ -31,12 +59,30 @@ export default function CatalogClient() {
 
   function clearFilters() {
     setDraftFilters({});
-    setAppliedFilters({});
+    void changeAppliedFilters({});
   }
 
-  const isLoading = query.isPending || query.isFetching;
-  const status = isLoading ? "loading" : query.isError ? "error" : "success";
-  const campers = query.data?.pages.flatMap((page) => page.campers) ?? [];
+  function loadMore() {
+    if (query.hasNextPage && !query.isFetching && !query.isPlaceholderData) {
+      void query.fetchNextPage({ cancelRefetch: false });
+    }
+  }
+
+  const isLoading =
+    query.isPending || (query.isFetching && !query.isFetchingNextPage);
+  const status = isLoading
+    ? "loading"
+    : query.isError && !query.isFetchNextPageError
+      ? "error"
+      : "success";
+  const seenIds = new Set<string>();
+  const campers = (query.data?.pages.flatMap((page) => page.campers) ?? []).filter(
+    (camper) => {
+      if (seenIds.has(camper.id)) return false;
+      seenIds.add(camper.id);
+      return true;
+    },
+  );
 
   return (
     <main className={`container ${styles.catalog}`}>
@@ -54,6 +100,10 @@ export default function CatalogClient() {
           status={status}
           onClear={clearFilters}
           onRetry={() => void query.refetch()}
+          hasNextPage={query.hasNextPage}
+          isFetchingNextPage={query.isFetchingNextPage}
+          nextPageError={query.isFetchNextPageError}
+          onLoadMore={loadMore}
         />
       </section>
     </main>

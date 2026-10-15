@@ -8,6 +8,10 @@ interface CamperListProps {
   status?: "success" | "loading" | "error";
   onClear: () => void;
   onRetry: () => void;
+  hasNextPage: boolean;
+  isFetchingNextPage: boolean;
+  nextPageError: boolean;
+  onLoadMore: () => void;
 }
 
 export default function CamperList({
@@ -15,6 +19,10 @@ export default function CamperList({
   status = "success",
   onClear,
   onRetry,
+  hasNextPage,
+  isFetchingNextPage,
+  nextPageError,
+  onLoadMore,
 }: CamperListProps) {
   if (status === "error") {
     return (
@@ -84,7 +92,7 @@ export default function CamperList({
       <ul
         className={styles.list}
         aria-label="Camper results"
-        aria-busy={isLoading}
+        aria-busy={isLoading || isFetchingNextPage}
         inert={isLoading}
       >
         {campers.map((camper) => (
@@ -93,6 +101,37 @@ export default function CamperList({
           </li>
         ))}
       </ul>
+      {hasNextPage && (
+        <div className={styles.pagination}>
+          {nextPageError && !isFetchingNextPage && (
+            <p
+              id="catalog-pagination-error"
+              className={styles.paginationError}
+              role="alert"
+            >
+              Couldn&apos;t load more campers. Please try again.
+            </p>
+          )}
+          <button
+            className={styles.loadMore}
+            type="button"
+            disabled={isLoading || isFetchingNextPage}
+            aria-busy={isFetchingNextPage}
+            aria-describedby={
+              nextPageError && !isFetchingNextPage
+                ? "catalog-pagination-error"
+                : undefined
+            }
+            onClick={onLoadMore}
+          >
+            {isFetchingNextPage
+              ? "Loading..."
+              : nextPageError
+                ? "Retry"
+                : "Load more"}
+          </button>
+        </div>
+      )}
       {isLoading && (
         <div className={styles.overlay}>
           <div className={styles.loadingDialog} role="status" aria-live="polite">
