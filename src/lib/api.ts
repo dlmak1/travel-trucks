@@ -1,4 +1,5 @@
 import axios from "axios";
+import type { BookingRequest, BookingResponse } from "@/types/booking";
 import type {
   Camper,
   CamperReview,
@@ -80,6 +81,25 @@ export async function getCamperReviews(id: string): Promise<CamperReview[]> {
 
   const { data } = await api.get<CamperReview[]>(
     `/campers/${encodeURIComponent(camperId)}/reviews`,
+  );
+
+  return data;
+}
+
+export async function createBookingRequest(
+  id: string,
+  booking: BookingRequest,
+): Promise<BookingResponse> {
+  const camperId = id.trim();
+
+  if (!camperId) {
+    throw new Error("Camper ID is required.");
+  }
+
+  // Only send fields documented by BookingRequestDto in Swagger.
+  const { data } = await api.post<BookingResponse>(
+    `/campers/${encodeURIComponent(camperId)}/booking-requests`,
+    { name: booking.name.trim(), email: booking.email.trim() },
   );
 
   return data;

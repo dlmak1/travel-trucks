@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { isAxiosError } from "axios";
 import CamperGallery from "@/components/CamperGallery/CamperGallery";
+import BookingForm from "@/components/BookingForm/BookingForm";
 import Reviews from "@/components/Reviews/Reviews";
 import { getCamperById, getCamperReviews } from "@/lib/api";
 import type {
@@ -188,15 +189,7 @@ export default async function CamperDetailsPage({
         <Suspense fallback={<Reviews status="loading" />}>
           <CamperReviews camperId={camper.id} />
         </Suspense>
-        <section className={styles.booking} aria-labelledby="booking-heading">
-          <h2 id="booking-heading">Book your campervan now</h2>
-          <p className={styles.bookingSubtitle}>
-            Stay connected! We are always ready to help you.
-          </p>
-          <p className={styles.bookingNotice}>
-            Booking is currently unavailable.
-          </p>
-        </section>
+        <BookingForm key={camper.id} camperId={camper.id} />
       </div>
     </main>
   );
