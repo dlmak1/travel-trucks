@@ -112,15 +112,6 @@
   margin-top: 88px;
 }
 
-.reviewsNotice {
-  min-height: 180px;
-  margin-top: var(--space-md);
-  padding: var(--space-sm);
-  border-radius: var(--radius-card);
-  color: var(--color-text-secondary);
-  background-color: var(--color-surface);
-}
-
 .booking {
   min-width: 0;
   min-height: 382px;

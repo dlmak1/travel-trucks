@@ -1,6 +1,7 @@
 import axios from "axios";
 import type {
   Camper,
+  CamperReview,
   CampersQueryParams,
   CampersResponse,
   GetCampersParams,
@@ -65,6 +66,20 @@ export async function getCamperById(id: string): Promise<Camper> {
 
   const { data } = await api.get<Camper>(
     `/campers/${encodeURIComponent(camperId)}`,
+  );
+
+  return data;
+}
+
+export async function getCamperReviews(id: string): Promise<CamperReview[]> {
+  const camperId = id.trim();
+
+  if (!camperId) {
+    throw new Error("Camper ID is required.");
+  }
+
+  const { data } = await api.get<CamperReview[]>(
+    `/campers/${encodeURIComponent(camperId)}/reviews`,
   );
 
   return data;

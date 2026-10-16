@@ -1,10 +1,11 @@
-import { cache } from "react";
+import { cache, Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { isAxiosError } from "axios";
 import CamperGallery from "@/components/CamperGallery/CamperGallery";
-import { getCamperById } from "@/lib/api";
+import Reviews from "@/components/Reviews/Reviews";
+import { getCamperById, getCamperReviews } from "@/lib/api";
 import type {
   CamperAmenity,
   CamperEngine,
@@ -21,6 +22,16 @@ const getCamper = cache(async (id: string) => {
     return null;
   }
 });
+
+async function CamperReviews({ camperId }: { camperId: string }) {
+  const reviews = await getCamperReviews(camperId).catch(() => null);
+
+  if (reviews === null) {
+    return <Reviews status="error" camperId={camperId} />;
+  }
+
+  return <Reviews status="success" reviews={reviews} />;
+}
 
 const formLabels: Record<CamperForm, string> = {
   alcove: "Alcove",
@@ -174,14 +185,9 @@ export default async function CamperDetailsPage({
       </div>
 
       <div className={styles.lower}>
-        <section aria-labelledby="reviews-heading">
-          <h2 id="reviews-heading" className={styles.title}>
-            Reviews
-          </h2>
-          <p className={styles.reviewsNotice}>
-            Reviews are currently unavailable.
-          </p>
-        </section>
+        <Suspense fallback={<Reviews status="loading" />}>
+          <CamperReviews camperId={camper.id} />
+        </Suspense>
         <section className={styles.booking} aria-labelledby="booking-heading">
           <h2 id="booking-heading">Book your campervan now</h2>
           <p className={styles.bookingSubtitle}>
