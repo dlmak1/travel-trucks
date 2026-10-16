@@ -29,9 +29,10 @@ const transmissionLabels: Record<CamperTransmission, string> = {
 
 interface CamperCardProps {
   camper: CamperListItem;
+  preload?: boolean;
 }
 
-export default function CamperCard({ camper }: CamperCardProps) {
+export default function CamperCard({ camper, preload = false }: CamperCardProps) {
   const location = camper.location.split(", ").reverse().join(", ");
   const badges = [
     { icon: "petrol", label: engineLabels[camper.engine] },
@@ -47,6 +48,7 @@ export default function CamperCard({ camper }: CamperCardProps) {
           src={camper.coverImage}
           alt={camper.name}
           fill
+          preload={preload}
           sizes="(max-width: 600px) calc(100vw - 80px), 219px"
         />
       </div>

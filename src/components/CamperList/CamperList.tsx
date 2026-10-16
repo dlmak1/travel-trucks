@@ -95,9 +95,9 @@ export default function CamperList({
         aria-busy={isLoading || isFetchingNextPage}
         inert={isLoading}
       >
-        {campers.map((camper) => (
+        {campers.map((camper, index) => (
           <li key={camper.id}>
-            <CamperCard camper={camper} />
+            <CamperCard camper={camper} preload={index === 0} />
           </li>
         ))}
       </ul>
