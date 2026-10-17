@@ -124,11 +124,24 @@ export default function CamperList({
             }
             onClick={onLoadMore}
           >
-            {isFetchingNextPage
-              ? "Loading..."
-              : nextPageError
-                ? "Retry"
-                : "Load more"}
+            {isFetchingNextPage ? (
+              <span className={styles.loadingContent}>
+                <svg
+                  className={styles.paginationLoader}
+                  width="18"
+                  height="18"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <use href="/icons/sprite.svg#icon-loader" />
+                </svg>
+                <span>Loading...</span>
+              </span>
+            ) : nextPageError ? (
+              "Retry"
+            ) : (
+              "Load more"
+            )}
           </button>
         </div>
       )}

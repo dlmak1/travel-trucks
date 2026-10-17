@@ -38,6 +38,17 @@
   cursor: pointer;
 }
 
+.loadingContent {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.paginationLoader {
+  flex: 0 0 18px;
+  animation: spin 1s linear infinite;
+}
+
 .loadMore:not(:disabled):hover {
   border-color: var(--color-accent-hover);
 }
@@ -210,7 +221,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .loader {
+  .loader,
+  .paginationLoader {
     animation: none;
   }
 }
