@@ -68,6 +68,7 @@
 }
 
 .invalidName {
+  padding-bottom: 21px;
   font-family: var(--font-booking-error), sans-serif;
   font-weight: 500;
   line-height: 20px;
@@ -99,7 +100,7 @@
 .errorIcon {
   position: absolute;
   top: 18px;
-  right: 19px;
+  right: 18px;
   pointer-events: none;
 }
 
