@@ -24,6 +24,15 @@ pages with an interactive, cached catalog backed by a real public API.
 [API & Booking](#api--booking) · [Deployment](#deployment) ·
 [Project Structure](#project-structure) · [Author](#author)
 
+## My Contributions
+
+**Role:** Individual Project · Frontend Developer
+
+- Developed responsive home, camper catalog, and vehicle details pages in **Next.js, React, TypeScript, and CSS Modules**, based on Figma designs.
+- Implemented filtering by location, camper form, engine, and transmission, plus incremental pagination, cached API queries, and loading/error/empty states with **TanStack Query**.
+- Integrated a public **REST API** using **Axios** for camper details, image galleries, specifications, ratings, and reviews.
+- Built a booking **contact request** form with validation, API submission using `useMutation`, success/error states, and automated API tests. The form does not reserve dates or check availability.
+
 ## Features
 
 ### Browse and filter
